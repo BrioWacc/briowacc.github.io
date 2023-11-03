@@ -1,5 +1,4 @@
 html, body {
-    height: 100%;
     margin: 0;
     padding: 0;
     background: rgb(30, 30, 30);
@@ -237,7 +236,6 @@ footer {
     justify-content: center;
     align-items: center;
     padding-bottom: 50px;
-    height: 100%;
 }
 
 footer a {
