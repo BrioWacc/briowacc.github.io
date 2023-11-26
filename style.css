@@ -1,0 +1,321 @@
+html, body {
+    background: rgb(235, 140, 85);
+    padding:0;
+    margin:0;
+}
+
+body {
+    display: flex;
+    flex-flow: column;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.workaround {
+    width: 100%;
+    height: 50px;
+    background: rgb(51, 51, 51);
+    top: 0;
+    left: 0;
+}
+
+.nav a {
+    text-decoration: none;
+    color: rgb(180, 180, 180);
+    margin: 5px 10px 5px 10px;
+    padding: 0;
+    font-size: 20px;
+}
+
+.nav {
+    background: rgb(51, 51, 51);
+    width: 100%;
+    max-width: 1100px;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+}
+
+.nav > p {
+    color: rgb(180, 180, 180);
+    font-size: 20px;
+    margin: 5px 10px 5px 10px;
+}
+
+.mobile {
+    display: none;
+}
+
+.mobilenav > p {
+    color: rgb(180, 180, 180);
+    font-size: 22px;
+}
+
+.subbar a {
+    text-decoration: none;
+    color: rgb(180, 180, 180);
+    margin: 5px 10px 5px 10px;
+    padding: 0;
+    font-size: 18px;
+}
+
+.sectionLorem {
+    background: rgb(51, 51, 51);
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 10px;
+    border: solid 2px;
+    border-radius: 10px;
+    max-width: 600px;
+}
+
+.sectionLorem > hr {
+    color: rgb(45, 45, 45);
+    width: 100%;
+}
+
+.sectionLorem > h3 {
+    color: rgb(180, 180, 180);
+}
+
+.sectionLorem > p {
+    color: rgb(180, 180, 180);
+}
+
+.progress-bar-html {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 40px;
+    background: rgb(100, 100, 220);
+    border-radius: 6px;
+    display:flex;
+    align-items: center;
+    border: solid 2px;
+    max-width: 1000px;
+}
+
+.filled-bar-html {
+    background: lightblue;
+    width: 30%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 10px;
+    white-space: nowrap;
+    border-radius: 4px;
+}
+
+.progress-bar-html > p {
+    margin-left: auto;
+    margin-right: 15px;
+    background: rgb(80, 80, 240);
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+}
+
+.progress-bar-javascript {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 40px;
+    background: rgb(220, 100, 100);
+    border-radius: 6px;
+    display:flex;
+    align-items: center;
+    border: solid 2px;
+    max-width: 1000px;
+}
+
+.filled-bar-javascript {
+    background: lightcoral;
+    width: 40%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 10px;
+    white-space: nowrap;
+    border-radius: 4px;
+}
+
+.progress-bar-javascript > p {
+    margin-left: auto;
+    margin-right: 15px;
+    background: rgb(240, 80, 80);
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+    opacity: 80%;
+}
+
+.progress-bar-design {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 40px;
+    background: rgb(100, 210, 100);
+    border-radius: 6px;
+    display:flex;
+    align-items: center;
+    border: solid 2px;
+    max-width: 1000px;
+}
+
+.filled-bar-design {
+    background: lightgreen;
+    width: 20%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 10px;
+    white-space: nowrap;
+    border-radius: 4px;
+}
+
+.progress-bar-design > p {
+    margin-left: auto;
+    margin-right: 15px;
+    background: rgb(80, 240, 80);
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+}
+
+.cards {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.card1,
+.card2,
+.card3 {
+    border: 1px solid black;
+    border-radius: 8px;
+    margin: 15px;
+    width: 250px;
+    height: 200px;
+    background: rgb(51, 51, 51);
+}
+
+.cards img {
+    width: 250px;
+    height: 150px;
+    opacity: 20%;
+    border-radius: 8px 8px 0 0;
+    margin: 0;
+    border-bottom: solid 1px black;
+    transition: all 500ms;
+}
+
+.card1:hover > img,
+.card2:hover > img,
+.card3:hover > img {
+    opacity: 90%;
+}
+
+.card1 h4,
+.card2 h4,
+.card3 h4 {
+    color: rgb(170, 170, 170);
+    margin-left: 5px;
+    text-decoration: underline 1px;
+}
+
+.card1 a,
+.card2 a,
+.card3 a {
+    color: rgb(170, 170, 170);
+    margin-left: 5px;
+    text-decoration: none;
+}
+
+.sectionChat {
+    margin: auto;
+}
+
+#chat-messages {
+    background: rgb(51, 51, 51);
+    border-radius: 3px;
+    border: solid 2px black;
+    margin: 0 0 5px 0;
+    color: rgb(170, 170, 170);
+    max-width: 700px;
+}
+
+footer {
+    background: rgb(51, 51, 51);
+    margin: 10px 0 0 0;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    height: 100vh;
+}
+
+footer > p {
+    color: rgb(170, 170, 170);
+}
+@media only screen and (max-width: 400px) {
+    .nav {
+        display: none;
+    }
+
+    .workaround {
+        display: none;
+    }
+
+    .mobile {
+        display: block;
+    }
+
+    .mobilenav {
+        background: rgb(51, 51, 51);
+        width: 100%;
+        height: 50px;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .subbar {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+        background: rgb(45, 45, 45);
+    }
+
+    .cards {
+        display: flex;
+        flex-flow: column;
+    }
+}
+@media only screen and (min-width: 401px) and (max-width: 800px){
+    .cards {
+        display: flex;
+        flex-flow: wrap;
+        gap: 15px;
+        justify-content: center;
+    }
+}
+@media only screen and (min-width: 801px){
+    .nav a {
+        margin: 5px 30px 5px 25px;
+    }
+
+    .cards {
+        display: flex;
+        flex-flow: wrap;
+        gap: 15px;
+        justify-content: center;
+    }
+}
