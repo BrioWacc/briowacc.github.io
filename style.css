@@ -1,0 +1,26 @@
+@font-face {
+    font-family: 'PixelArt';
+    src: url('Fonts/04B_30__.TTF') format('truetype');
+}
+
+@font-face {
+    font-family: 'Minecraftia';
+    src: url('Fonts/Minecraftia.ttf') format('truetype');
+}
+
+body {
+    background: rgb(40, 40, 40);
+}
+
+#canvas {
+    background: darkslategray;
+    border: 5px black solid;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1600px;
+    height: 1066px;
+    image-rendering: pixelated;
+    border-radius: 5px;
+}
