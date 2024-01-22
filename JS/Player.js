@@ -92,7 +92,7 @@ class Player {
             maxhealth:80,
             health: 80,
             damage: 2.5,
-            speed_mult: 1.2,
+            speed_mult: 1.4,
             tear_mult: 1,
             tear_type: tearTypes.normal.string,
             tear_persistence: 2,
