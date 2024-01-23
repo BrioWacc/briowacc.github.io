@@ -4,7 +4,7 @@ class upgradeDamage {
     }
 
     apply(player) {
-        player.stats.damage += 0.5;
+        player.stats.damage += 0.75;
     }
 }
 
@@ -36,7 +36,7 @@ class upgradeSpeed {
     }
 
     apply(player) {
-       player.stats.speed_mult += 0.25;
+       player.stats.speed_mult += 0.3;
        player.stats.tear_speed += 0.5;
     }
 }
