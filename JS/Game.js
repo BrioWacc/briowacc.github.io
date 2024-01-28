@@ -12,6 +12,7 @@ class Game {
         this.initLevelUp();
         this.initTimer();
         this.initDamageMessage();
+        this.initMouseHeld();
     }
 
     initGame() {
@@ -92,6 +93,10 @@ class Game {
         this.damageMessageContainer = [];
     }
 
+    initMouseHeld() {
+        this.leftMouseDown = false;
+    }
+
     keyInput(keyCode, state) {
         switch (keyCode) {
             case 87:
@@ -108,6 +113,9 @@ class Game {
                 break;
             case 72:
                 if(state) keys.h.pressed = !keys.h.pressed;
+                break;
+            case 67:
+                if(state) this.leftMouseDown=!this.leftMouseDown;
                 break;
             case 27:
                 if(state) this.togglePause();
@@ -152,6 +160,8 @@ class Game {
         window.addEventListener('keyup', this.handleKeyUp.bind(this));
         window.addEventListener('click', this.playerClick.bind(this));
         window.addEventListener('mousemove', this.logMouse.bind(this));
+        window.addEventListener('mousedown', this.handleMouseDown.bind(this));
+        window.addEventListener('mouseup', this.handleMouseUp.bind(this));
         document.addEventListener('visibilitychange', this.tabChange.bind(this));
     }
 
@@ -164,7 +174,6 @@ class Game {
     }
 
     playerClick(event) {
-        if(!this.isGameOver && !this.isGamePaused && !this.levelUpActive)this.player.throwBone();
         if(this.levelUpActive && (Date.now() - this.levelUpActiveTimestamp) > 1000) {
             if(this.rect1.x < mousePos.clientX                &&
                mousePos.clientX < this.rect1.x + this.rect1.w &&
@@ -208,6 +217,18 @@ class Game {
             }
         } else {
             console.log("player is back");
+        }
+    }
+
+    handleMouseDown(event) {
+        if (event.button === 0) { // Überprüfen, ob die linke Maustaste gedrückt wird (0 ist die linke Maustaste)
+            this.leftMouseDown = true;
+        }
+    }
+
+    handleMouseUp(event) {
+        if (event.button === 0) { // Überprüfen, ob die linke Maustaste losgelassen wird
+            this.leftMouseDown = false;
         }
     }
 
@@ -302,8 +323,6 @@ class Game {
             }
         }
 
-        this.player.drawOverlay(ctx, this.camera.x, this.camera.y);
-
         for(const bone of this.player.bones) {
             for(const enemy of this.enemyContainer) {
                 if(this.checkCollision(bone.getHitbox(), enemy.getHitbox())) {
@@ -381,6 +400,8 @@ class Game {
         this.player.movePlayer(keys);
         this.player.draw(ctx);
 
+        if(this.leftMouseDown && (!this.isGameOver && !this.isGamePaused && !this.levelUpActive)) this.player.throwBone();
+
         //Bones
         for (const bone of this.player.bones) {
             if (bone.isExpired()) this.player.removeBone(bone);
@@ -402,6 +423,8 @@ class Game {
         }
 
         this.renderTimer(ctx);
+
+        this.player.drawOverlay(ctx, this.camera.x, this.camera.y);
 
         if (this.elapsedSeconds - this.lastBuff >= 40) this.buffEnemies();
 
