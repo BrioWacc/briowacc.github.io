@@ -26,7 +26,7 @@ class upgradeHealth {
     }
 
     apply(player) {
-       player.stats.health += player.stats.maxhealth*0.5;
+       player.stats.health += Math.round(player.stats.maxhealth*0.5);
     }
 }
 
@@ -80,7 +80,7 @@ class upgradeDamageReduction {
 
     apply(player) {
         if(player.stats.dmg_reduction >= 0.4) {
-            player.stats.health += player.stats.maxhealth*0.2;
+            player.stats.health += Math.round(player.stats.maxhealth*0.2);
         } else {
             player.stats.dmg_reduction += 0.1;
         }
