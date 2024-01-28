@@ -11,6 +11,7 @@ class Game {
         this.initBackGround();
         this.initLevelUp();
         this.initTimer();
+        this.initDamageMessage();
     }
 
     initGame() {
@@ -29,14 +30,13 @@ class Game {
         this.buffFactor=1;
         this.lastEnemy="";
 
-        setInterval(() => {
-            this.buffEnemies();
-        }, 1000*40);
+        this.lastBuff=0;
     }
 
     buffEnemies() {
         this.buffFactor += 0.3;
         this.enemySpawnDelay /= 1.15;
+        this.lastBuff=Math.floor((Date.now() - this.timerStartTimestamp - this.timeOffset) / 1000);
         console.log("THE MOBS GOT STRONGER");
     }
 
@@ -74,7 +74,9 @@ class Game {
             new upgradeHealth(),
             new upgradeSpeed(),
             new upgradeBones(),
-            new upgradeBonesLongivity()
+            new upgradeBonesLongivity(),
+            new upgradeExperienceGain(),
+            new upgradeDamageReduction(),
         ]
 
         this.randomUpgrades = [];
@@ -82,6 +84,12 @@ class Game {
 
     initTimer() {
         this.timerStartTimestamp = Date.now();
+        this.elapsedSeconds=0;
+        this.timeOffset=0;
+    }
+
+    initDamageMessage() {
+        this.damageMessageContainer = [];
     }
 
     keyInput(keyCode, state) {
@@ -136,6 +144,7 @@ class Game {
                 }
             }
         }
+        this.timeOffset+=this.gamePauseDiff;
     }
 
     setupEventListeners() {
@@ -252,6 +261,8 @@ class Game {
                 this.enemySpawnTimestamp = Date.now();
                 console.log(enemy.name, " spawned", enemy.state.x, enemy.state.y);
             }
+
+
         }
     }
 
@@ -332,8 +343,16 @@ class Game {
         for(const bone of this.player.bones) {
             ctx.fillRect(bone.getHitbox().x, bone.getHitbox().y, bone.getHitbox().w, bone.getHitbox().h);
         }
+    }
 
+    DamageMessage(enemy, damage) {
+        const newMsg = new damageMessage(enemy.state.x, enemy.state.y, damage);
+        this.damageMessageContainer.push(newMsg);
+    }
 
+    removeMessage(msg){
+        const index = this.damageMessageContainer.indexOf(msg);
+        if(index === -1) this.damageMessageContainer.splice(index, 1);
     }
 
     //Der eigentliche Gameloop
@@ -373,7 +392,18 @@ class Game {
 
         if(keys.h.pressed) this.drawHitboxes();
 
+        for(const msg of this.damageMessageContainer) {
+            if(msg.isExpired()) {
+                this.removeMessage(msg);
+            } else {
+                msg.update();
+                msg.draw(ctx);
+            }
+        }
+
         this.renderTimer(ctx);
+
+        if (this.elapsedSeconds - this.lastBuff >= 40) this.buffEnemies();
 
         this.hitBoxHandler();
     }
@@ -490,6 +520,7 @@ class Game {
                 }
             }
         }
+        this.timeOffset += this.levelUpDiff;
         this.levelUpActive=false;
     }
 
@@ -545,10 +576,10 @@ class Game {
     }
 
     renderTimer(ctx) {
-        const elapsedSeconds = Math.floor((Date.now() - this.timerStartTimestamp) / 1000);
+        this.elapsedSeconds = Math.floor((Date.now() - this.timerStartTimestamp - this.timeOffset) / 1000);
 
         // Rendern Sie die vergangenen Sekunden an einer bestimmten Position auf dem Canvas
-        const timerText = `Time: ${elapsedSeconds}s`;
+        const timerText = `Time: ${this.elapsedSeconds}s`;
         ctx.fillStyle = "white";
         ctx.font = "20px Minecraftia";
         ctx.fillText(timerText, this.camera.x + this.width/this.camera.zoomFactor - 125, this.camera.y + 50);

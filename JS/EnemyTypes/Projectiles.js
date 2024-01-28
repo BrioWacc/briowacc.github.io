@@ -68,10 +68,10 @@ class Projectiles {
     //Hitbox Info
     getHitbox() {
         return {
-            x: (this.x - this.sprite_correctionX/2 + 4) + 18,
-            y: (this.y - this.sprite_correctionY/2 + 4) + 18,
-            w: (this.sprite.WIDTH*STRETCH_FACTOR - 36) * this.variance,
-            h: (this.sprite.HEIGHT*STRETCH_FACTOR - 36) * this.variance
+            x: (this.x - this.sprite_correctionX/2 + 4) + 19,
+            y: (this.y - this.sprite_correctionY/2 + 4) + 19,
+            w: (this.sprite.WIDTH*STRETCH_FACTOR - 38) * this.variance,
+            h: (this.sprite.HEIGHT*STRETCH_FACTOR - 38) * this.variance
         }
     }
 

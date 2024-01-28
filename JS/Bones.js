@@ -5,8 +5,9 @@ class Bones {
         this.lifespan = 1000 + player.stats.tear_long;
         this.tear_speed = player.stats.tear_speed;
         this.baseSpeed = 2;
-        this.damage = 10 * player.stats.damage;
+        this.damage = 10 * player.stats.damage * (0.9 + Math.random() * 0.2);
         this.persistence = player.stats.tear_persistence;
+        this.size=player.stats.tear_size;
         this.x = player.state.x;
         this.y = player.state.y;
 
@@ -88,34 +89,34 @@ class Bones {
     getHitbox() {
         if(this.fracX >= this.fracY)
             return {
-                x: this.x - this.sprite_correctionX,
-                y: this.y - this.sprite_correctionY,
-                w: this.sprite.WIDTH*STRETCH_FACTOR,
-                h: this.sprite.HEIGHT*STRETCH_FACTOR
+                x: this.x - this.sprite_correctionX*this.size,
+                y: this.y - this.sprite_correctionY*this.size,
+                w: this.sprite.WIDTH*STRETCH_FACTOR*this.size,
+                h: this.sprite.HEIGHT*STRETCH_FACTOR*this.size
             }
         else
             return {
-                x: this.x - this.sprite_correctionY,
-                y: this.y - this.sprite_correctionX,
-                w: this.sprite.HEIGHT*STRETCH_FACTOR,
-                h: this.sprite.WIDTH*STRETCH_FACTOR
+                x: this.x - this.sprite_correctionY*this.size,
+                y: this.y - this.sprite_correctionX*this.size,
+                w: this.sprite.HEIGHT*STRETCH_FACTOR*this.size,
+                h: this.sprite.WIDTH*STRETCH_FACTOR*this.size
             }
     }
 
     //Draw Funktion
     draw(ctx){
+        //setzung
         ctx.save();
-        //Zentrumsetzung
+
         ctx.translate(this.x, this.y);
 
-        //Rotierung um Winel
         ctx.rotate(this.angle);
 
         ctx.drawImage(
             this.sprite_sheet,
             this.sprite.sprite_offset * this.sprite.sprite_number, 0, this.sprite.WIDTH, this.sprite.HEIGHT, //Ermittlung des richtigen Sprites
-            -this.sprite_correctionX, -this.sprite_correctionY, //X & Y auf dem Canvas
-            this.sprite.WIDTH*STRETCH_FACTOR, this.sprite.HEIGHT*STRETCH_FACTOR)
+            -this.sprite_correctionX*this.size, -this.sprite_correctionY*this.size, //X & Y auf dem Canvas
+            this.sprite.WIDTH*STRETCH_FACTOR*this.size, this.sprite.HEIGHT*STRETCH_FACTOR*this.size)
 
         ctx.restore();
     }

@@ -41,8 +41,8 @@ class Wib {
         }
 
         this.state = { //RANDOM OFF-SCREEM
-            x: globx,
-            y: globy
+            x: (globx + this.sprite_correctionX) % game.width,
+            y: (globy + this.sprite_correctionY) % game.height
         }
 
         //IFrames
@@ -93,10 +93,10 @@ class Wib {
     //Bessere Player Experience mit 5 Abzug (dodging feeling)
     getHitbox() {
         return {
-            x: this.state.x - this.sprite_correctionX,
-            y: this.state.y - this.sprite_correctionY,
-            w: (this.sprite.WIDTH*STRETCH_FACTOR)*this.variance,
-            h: (this.sprite.HEIGHT*STRETCH_FACTOR)*this.variance
+            x: this.state.x - this.sprite_correctionX + 6,
+            y: this.state.y - this.sprite_correctionY + 6,
+            w: (this.sprite.WIDTH*STRETCH_FACTOR - 12)*this.variance,
+            h: (this.sprite.HEIGHT*STRETCH_FACTOR - 12)*this.variance
         }
     }
 
@@ -108,7 +108,7 @@ class Wib {
             this.stats.health -= damage;
             --source.persistence;
             this.iFramesTimestamp = Date.now();
-            console.log("I took damage", damage);
+            game.DamageMessage(this, damage);
         }
     }
 

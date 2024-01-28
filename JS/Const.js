@@ -4,6 +4,9 @@ const CANVAS_WIDTH = canvas.width = (1200+400)*3;
 const CANVAS_HEIGHT = canvas.height = (800+266)*3;
 const STRETCH_FACTOR = 4;
 const ZOOM_FACTOR = 3.5; //3
+let lastTimestamp = 0;
+const targetFPS = 60;
+const frameTime = 1000 / targetFPS;
 
 const tearTypes = {
     normal: {

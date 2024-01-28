@@ -40,8 +40,8 @@ class Glob {
         }
 
         this.state = { //RANDOM OFF-SCREEM
-            x: globx,
-            y: globy
+            x: globx + this.sprite_correctionX*2,
+            y: globy + this.sprite_correctionY*2
         }
 
         //IFrames
@@ -104,7 +104,7 @@ class Glob {
             this.stats.health -= damage;
             --source.persistence;
             this.iFramesTimestamp = Date.now();
-            console.log("I took damage", damage);
+            game.DamageMessage(this, damage);
         }
     }
 

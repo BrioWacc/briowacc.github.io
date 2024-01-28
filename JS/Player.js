@@ -1,3 +1,9 @@
+const directions = {
+    UP: 6,
+    DOWN: 0,
+    RIGHT: 3,
+    LEFT: 9
+}
 class Player {
     constructor(game) {
         this.game = game;
@@ -24,7 +30,7 @@ class Player {
 
         this.sprite = {
             sprite_number: 0,
-            sprite_number_offset: 0, //+3 RIGHT, +6 UP, +9 LEFT, +>12 Damage
+            sprite_number_offset: 0, //+3 RIGHT, +6 UP, +9 LEFT
             sprite_scope: 3,
             sprite_offset: 11,
             WIDTH: 11,
@@ -88,16 +94,19 @@ class Player {
             level: 1,
             currentxp:0,
             requiredXP: 100,
-            xpIncrement: 15,
+            xpIncrement: 1.1,
+            xp_mult: 1,
             maxhealth:80,
             health: 80,
+            dmg_reduction: 0,
             damage: 2.5,
-            speed_mult: 1.4,
+            speed_mult: 1.6,
             tear_mult: 1,
             tear_type: tearTypes.normal.string,
             tear_persistence: 2,
             tear_speed: 2,
-            tear_long: 0
+            tear_long: 0,
+            tear_size: 1
         }
 
         //Zentrierung
@@ -119,36 +128,33 @@ class Player {
 
     movePlayer(keys) {
         const speed = 2*this.stats.speed_mult;
+        let speedY = 0, speedX = 0;
 
         //Geh Logik W S Priorität über A D
-        if (keys.a.pressed) {
-            this.state.x -= speed;
-            this.sprite.sprite_number_offset=9;
+        if (keys.a.pressed) speedX -= speed;
+        if (keys.d.pressed) speedX += speed;
+        if (keys.w.pressed) speedY -= speed;
+        if (keys.s.pressed) speedY += speed;
+
+        if(speedX !== 0 && speedY !== 0) {
+            speedX /= Math.sqrt(2);
+            speedY /= Math.sqrt(2);
         }
 
-        if (keys.d.pressed) {
-            this.state.x += speed;
-            this.sprite.sprite_number_offset=3;
+        if (speedX !== 0 || speedY !== 0) {
+            if (speedY > 0) this.sprite.sprite_number_offset = directions.DOWN;
+            else if (speedY < 0) this.sprite.sprite_number_offset = directions.UP;
+            else if (speedX < 0) this.sprite.sprite_number_offset = directions.LEFT;
+            else if (speedX > 0) this.sprite.sprite_number_offset = directions.RIGHT;
+
+            this.updateSpriteNumber();
+
+            this.state.x += speedX;
+            this.state.y += speedY;
+        } else {
+            this.sprite.sprite_number_offset = directions.DOWN;
+            this.sprite.sprite_number = 0;
         }
-
-        if (keys.w.pressed) {
-            this.state.y -= speed;
-            this.sprite.sprite_number_offset=6;
-        }
-
-        if (keys.s.pressed) {
-            this.state.y += speed;
-            this.sprite.sprite_number_offset=0;
-        }
-
-        this.updateSpriteNumber();
-
-        //StandAnimation
-        if(this.lastx===this.state.x && this.lasty===this.state.y) this.sprite.sprite_number=0;
-
-        //Alte Position
-        this.lastx=this.state.x;
-        this.lasty=this.state.y;
 
         //Bounds Check
         this.state.x = Math.max(0, Math.min(this.game.width - this.sprite.WIDTH * STRETCH_FACTOR + this.sprite_correctionX, this.state.x));
@@ -159,11 +165,7 @@ class Player {
     updateSpriteNumber() {
         let factor = 15/this.stats.speed_mult;
         this.sprite_update_counter = (this.sprite_update_counter + 1) % Math.round(factor);
-        if(this.sprite_update_counter===0) {
-            this.sprite.sprite_number = (this.sprite.sprite_number + 1) % this.sprite.sprite_scope;
-            if(this.sprite.sprite_number === 0 && (this.sprite.sprite_number_offset === 0 || this.sprite.sprite_number_offset === 6)) this.sprite.sprite_number = 1;
-        }
-
+        if(this.sprite_update_counter===0) this.sprite.sprite_number = (this.sprite.sprite_number + 1) % this.sprite.sprite_scope;
     }
 
     //Knochen-Logik, jetzt - wann der letzte Knochen geworfen wurde - die Pausenzeit
@@ -185,14 +187,14 @@ class Player {
 
     //Bessere Player Experience (dodging feeling)
     getHitbox() {
-        if(this.sprite.sprite_number_offset === 6 || this.sprite.sprite_number_offset === 0) //OBEN UNTEN
+        if(this.sprite.sprite_number_offset === directions.UP || this.sprite.sprite_number_offset === directions.DOWN) //OBEN UNTEN
             return {
             x: this.state.x - this.sprite_correctionX + 8,
             y: this.state.y - this.sprite_correctionY + 11,
             w: this.sprite.WIDTH*STRETCH_FACTOR - 16,
             h: this.sprite.HEIGHT*STRETCH_FACTOR - 16
             }
-        else if (this.sprite.sprite_number_offset === 3)                                     //LINKS
+        else if (this.sprite.sprite_number_offset === directions.LEFT)                                     //LINKS
             return {
                 x: this.state.x - this.sprite_correctionX + 16,
                 y: this.state.y - this.sprite_correctionY + 11,
@@ -212,18 +214,20 @@ class Player {
         const hold = Date.now() - this.iFramesTimestamp; //BUG FIX
         if(hold < 0) this.iFramesTimestamp = Date.now() - this.iFramesDuration;
         if(Date.now() - this.iFramesTimestamp > this.iFramesDuration) {
-            this.stats.health -= damage;
+            this.stats.health -= Math.floor(damage * (1 - this.stats.dmg_reduction));
             if (this.stats.health <= 0) game.gameOver(name);
             this.iFramesTimestamp = Date.now();
         }
     }
 
     gainXP(XP) {
-        this.stats.currentxp += XP;
+        this.stats.currentxp += XP*this.stats.xp_mult;
         if(this.stats.currentxp >= this.stats.requiredXP) {
             ++this.stats.level;
+            this.stats.maxhealth += 2;
+            this.stats.health += 2;
             this.stats.currentxp %= this.stats.requiredXP;
-            this.stats.requiredXP += this.stats.xpIncrement;
+            this.stats.requiredXP *= this.stats.xpIncrement;
             game.levelUp();
         }
     }

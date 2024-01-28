@@ -4,18 +4,18 @@ class upgradeDamage {
     }
 
     apply(player) {
-        player.stats.damage += 0.75;
+        player.stats.damage += 1.25;
     }
 }
 
 class upgradeMaxHealth {
     getName() {
-        return "max healh upgrade";
+        return "max health upgrade";
     }
 
     apply(player) {
-        player.stats.maxhealth += 20;
-        player.stats.health += 10;
+        player.stats.maxhealth += 50;
+        player.stats.health += 15;
         if(player.stats.health > player.stats.maxhealth) player.stats.health = player.stats.maxhealth;
     }
 }
@@ -36,18 +36,19 @@ class upgradeSpeed {
     }
 
     apply(player) {
-       player.stats.speed_mult += 0.3;
+       player.stats.speed_mult += 0.5;
        player.stats.tear_speed += 0.5;
     }
 }
 
 class upgradeBones {
     getName() {
-        return "upgrade bones fire rate";
+        return "upgrade bones fire rate and size";
     }
 
     apply(player) {
-        player.stats.tear_mult += 0.25;
+        player.stats.tear_mult += 0.35;
+        player.stats.tear_size *= 1.15;
     }
 }
 
@@ -61,3 +62,28 @@ class upgradeBonesLongivity {
         player.stats.tear_long += 500;
     }
 }
+
+class upgradeExperienceGain {
+    getName() {
+        return "increased experience gain";
+    }
+
+    apply(player) {
+        player.stats.xp_mult += 0.4;
+    }
+}
+
+class upgradeDamageReduction {
+    getName() {
+        return "10% damage reduction";
+    }
+
+    apply(player) {
+        if(player.stats.dmg_reduction >= 0.4) {
+            player.stats.health += player.stats.maxhealth*0.2;
+        } else {
+            player.stats.dmg_reduction += 0.1;
+        }
+    }
+}
+
